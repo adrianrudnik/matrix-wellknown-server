@@ -19,12 +19,12 @@ services:
       - 8080:8080
 ```
 
-Now let's define the response to `/.well-known/matrix/server` if a request with an `Host: klonmaschine.de` header
-is recieved by placing a file into `./schema/klonmaschine.de.server.json`:
+Now let's define the response to `/.well-known/matrix/server` if a request with an `Host: klonmaschine.de` header is
+recieved by placing a file into `./schema/klonmaschine.de.server.json`:
 
 ```json
 {
-  "m.server": "matrix.klonmaschine:de:443"
+  "m.server": "matrix.klonmaschine.de:443"
 }
 ```
 
@@ -38,9 +38,10 @@ The same for `/.well-known/matrix/client` requests, placed into `./schema/klonma
 }
 ```
 
-Now boot it up with `docker-compose up -d` and the following requests are answered correctly and offer CORS support as well:
+Now boot it up with `docker-compose up -d` and the following requests are answered correctly and offer CORS support as
+well:
 
-http://klonmaschine.de:8080/.well-known/matrix/server
+http://klonmaschine.de:8080/.well-known/matrix/server  
 http://klonmaschine.de:8080/.well-known/matrix/client
 
 # Environment variables
@@ -51,3 +52,46 @@ The following configuration can be done by passing environment variables to this
 | --- | --- | --- |
 | BIND_ADDR | HTTP bind address | `:8080` |
 | SCHEMA_ROOT | Root folder for schema JSON files | `/var/schema` |
+
+# Remarks
+
+The element.io client does not use the server schema to resolve the homeserver. You need to specify the matrix server as
+full domain, in my example `matrix.klonmaschine.de` to connect to it.
+
+# Reserver proxy examples
+
+## Traefik v2.2
+
+I use this slightly redacted version to serve the app:
+
+```yaml
+http:
+  routers:
+    matrix.klonmaschine.de-schema:
+      rule: "Host(`klonmaschine.de`) && PathPrefix(`/.well-known/matrix/`)"
+      entryPoints:
+        - https
+      service: matrix.klonmaschine.de-schema
+      tls:
+        certResolver: http-le
+
+    matrix.klonmaschine.de-server:
+      rule: "Host(`matrix.klonmaschine.de`)"
+      entryPoints:
+        - https
+        - matrixfed
+      service: matrix.klonmaschine.de-server
+      tls:
+        certResolver: http-le
+
+  services:
+    matrix.klonmaschine.de-schema:
+      loadBalancer:
+        servers:
+          - url: "http://schemaserver:8080"
+
+    matrix.klonmaschine.de-server:
+      loadBalancer:
+        servers:
+          - url: "http://matrixserver:8008"
+```
