@@ -1,0 +1,21 @@
+# github.com/cyphar/filepath-securejoin v0.2.2
+## explicit
+github.com/cyphar/filepath-securejoin
+# github.com/go-chi/chi v1.5.1
+## explicit
+github.com/go-chi/chi
+github.com/go-chi/chi/middleware
+# github.com/go-chi/cors v1.1.1
+## explicit
+github.com/go-chi/cors
+# github.com/go-chi/render v1.0.1
+## explicit
+github.com/go-chi/render
+# github.com/pkg/errors v0.8.1
+github.com/pkg/errors
+# github.com/rs/zerolog v1.20.0
+## explicit
+github.com/rs/zerolog
+github.com/rs/zerolog/internal/cbor
+github.com/rs/zerolog/internal/json
+github.com/rs/zerolog/log

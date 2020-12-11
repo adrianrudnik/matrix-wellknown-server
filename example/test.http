@@ -1,0 +1,21 @@
+### Server option preflight
+
+OPTIONS http://localhost:8080/.well-known/matrix/server
+Origin: http://localhost
+Access-Control-Request-Method: GET
+
+### Server schema request
+
+GET http://localhost:8080/.well-known/matrix/server
+Accept: application/json
+
+### Client option preflight
+
+OPTIONS http://localhost:8080/.well-known/matrix/client
+Origin: http://localhost
+Access-Control-Request-Method: GET
+
+### Client schema request
+
+GET http://localhost:8080/.well-known/matrix/client
+Accept: application/json
