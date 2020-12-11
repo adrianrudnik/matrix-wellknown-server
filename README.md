@@ -20,11 +20,11 @@ services:
 ```
 
 Now let's define the response to `/.well-known/matrix/server` if a request with an `Host: klonmaschine.de` header is
-recieved by placing a file into `./schema/klonmaschine.de.server.json`:
+received by placing a file into `./schema/klonmaschine.de.server.json`:
 
 ```json
 {
-  "m.server": "matrix.klonmaschine.de:443"
+  "m.server": "matrix.klonmaschine.de:8448"
 }
 ```
 
@@ -33,7 +33,7 @@ The same for `/.well-known/matrix/client` requests, placed into `./schema/klonma
 ```json
 {
   "m.homeserver": {
-    "base_url": "https://matrix.klonmaschine.de"
+    "base_url": "https://matrix.klonmaschine.de:8448"
   }
 }
 ```
@@ -41,8 +41,8 @@ The same for `/.well-known/matrix/client` requests, placed into `./schema/klonma
 Now boot it up with `docker-compose up -d` and the following requests are answered correctly and offer CORS support as
 well:
 
-http://klonmaschine.de:8080/.well-known/matrix/server  
-http://klonmaschine.de:8080/.well-known/matrix/client
+https://klonmaschine.de/.well-known/matrix/server  
+http://klonmaschine.de/.well-known/matrix/client
 
 # Environment variables
 
