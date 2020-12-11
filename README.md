@@ -48,6 +48,6 @@ http://klonmaschine.de:8080/.well-known/matrix/client
 The following configuration can be done by passing environment variables to this app:
 
 | Key | Description | Default |
-| --- | --- |
+| --- | --- | --- |
 | BIND_ADDR | HTTP bind address | `:8080` |
 | SCHEMA_ROOT | Root folder for schema JSON files | `/var/schema` |
