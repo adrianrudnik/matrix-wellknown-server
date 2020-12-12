@@ -12,7 +12,7 @@ version: '3.7'
 
 services:
   updater:
-    image: adrianrudnik/maitrx-schema-server
+    image: adrianrudnik/matrix-schema-server:latest
     volumes:
       - ./schema:/var/schema
     ports:
