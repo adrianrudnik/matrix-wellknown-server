@@ -39,8 +39,6 @@ func SchemaLookupRoute(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(400)
 	}
 
-	log.Debug().Str("schema", schema).Str("host", host).Msg("Looking for schenma file")
-
 	// Detect undefined schemas
 	if _, err := os.Stat(schema); os.IsNotExist(err) {
 		w.WriteHeader(404)

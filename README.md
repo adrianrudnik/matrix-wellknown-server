@@ -3,6 +3,12 @@
 Simple and slim server to answer `well-known` requests for [matrix.org](https://matrix.org) servers based on the request
 host header, to be used behind a reverse proxy of your choice.
 
+Features:
+
+- Have a single server instance serve as many different domains on the same reverse proxy as required.
+- Simple managment by passing through your JSON files queried by the `Host`-header.
+- Low footprint (~8MB RAM, 10MB binary), no heavy dependencies (single binary), fast responses (~1ms).
+
 # Setup example
 
 For my own domain `klonmaschine.de` I use the following docker-compose setup:
@@ -12,7 +18,7 @@ version: '3.7'
 
 services:
   updater:
-    image: adrianrudnik/matrix-schema-server:latest
+    image: adrianrudnik/matrix-wellknown-server:latest
     volumes:
       - ./schema:/var/schema
     ports:
@@ -60,38 +66,25 @@ full domain, in my example `matrix.klonmaschine.de` to connect to it.
 
 # Reserver proxy examples
 
-## Traefik v2.2
+## Traefik
 
 I use this slightly redacted version to serve the app:
 
 ```yaml
 http:
   routers:
-    matrix.klonmaschine.de-schema:
-      rule: "Host(`klonmaschine.de`) && PathPrefix(`/.well-known/matrix/`)"
+    matrix-wellknown-server:
+      rule: "PathPrefix(`/.well-known/matrix/`)"
+      priority: 1000
       entryPoints:
         - https
-      service: matrix.klonmaschine.de-schema
+      service: wellknown-server
       tls:
         certResolver: http-le
-
-    matrix.klonmaschine.de-server:
-      rule: "Host(`matrix.klonmaschine.de`)"
-      entryPoints:
-        - https
-        - matrixfed
-      service: matrix.klonmaschine.de-server
-      tls:
-        certResolver: http-le
-
+        
   services:
-    matrix.klonmaschine.de-schema:
+    wellknown-server:
       loadBalancer:
         servers:
-          - url: "http://schemaserver:8080"
-
-    matrix.klonmaschine.de-server:
-      loadBalancer:
-        servers:
-          - url: "http://matrixserver:8008"
+          - url: "http://wellknown-server:8080"
 ```

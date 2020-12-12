@@ -31,12 +31,13 @@ func LoggerMiddleware(logger *zerolog.Logger) func(next http.Handler) http.Handl
 				}
 
 				// log end request
-				log.Debug().
+				log.Info().
 					Str("type", "access").
 					Timestamp().
 					Fields(map[string]interface{}{
 						"remote_ip":  r.RemoteAddr,
 						"url":        r.URL.Path,
+						"host":       r.Host,
 						"proto":      r.Proto,
 						"method":     r.Method,
 						"user_agent": r.Header.Get("User-Agent"),
